@@ -1,0 +1,110 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Accueil - Gestion de Stock{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Bienvenue sur votre système de gestion de stock !</h1>
+    <p class="lead">Commencez par explorer vos produits, enregistrer des mouvements ou consulter les rapports.</p>
+    <hr class="my-4">
+    <p>Utilisez la barre de navigation ci-dessus pour accéder aux différentes fonctionnalités.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'product_list' %}" role="button">Voir les produits</a>
+</div>
+
+{# Section Statistiques Générales #}
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Total Produits</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_products }}</h5>
+                <p class="card-text">produits enregistrés dans le système.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">Produits en Stock Faible</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_low_stock_products }}</h5>
+                <p class="card-text">produits nécessitant une attention.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-header">Produits en Rupture de Stock</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_out_of_stock_products }}</h5>
+                <p class="card-text">produits avec une quantité de 0.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Section Alertes Stock Faible (déjà présente, mais à vérifier si elle est toujours à jour) #}
+{% if low_stock_products %}
+<div class="card bg-warning text-white mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">🚨 Alertes Stock Faible 🚨</h5>
+    </div>
+    <div class="card-body">
+        <ul class="list-unstyled">
+            {% for product in low_stock_products %}
+            <li><strong>{{ product.nom }}</strong> : {{ product.quantite_actuelle }} (Seuil: {{ product.seuil_alerte_faible }})</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'alert_list' %}" class="btn btn-sm btn-light mt-2">Voir toutes les alertes</a>
+    </div>
+</div>
+{% endif %}
+
+{# Section Mouvements Récents #}
+{% if recent_movements %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Derniers Mouvements de Stock</h5>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            {% for movement in recent_movements %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ movement.date_mouvement|date:"d/m/Y H:i" }} -
+                <strong>{{ movement.produit.nom }}</strong> :
+                {% if movement.type_mouvement == 'entree' %}
+                    <span class="badge badge-success badge-pill">+ {{ movement.quantite }}</span>
+                {% else %}
+                    <span class="badge badge-danger badge-pill">- {{ movement.quantite }}</span>
+                {% endif %}
+                <small class="text-muted ml-auto">Par {{ movement.utilisateur.username }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'report_generation' %}" class="btn btn-sm btn-outline-info mt-3">Voir tous les mouvements</a>
+    </div>
+</div>
+{% endif %}
+
+{# Section Statistiques Mensuelles #}
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Entrées de Stock (Dernier mois)</div>
+            <div class="card-body">
+                <h5 class="card-title text-success">{{ total_in_last_month }} unités</h5>
+                <p class="card-text">total des réceptions au cours des 30 derniers jours.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Sorties de Stock (Dernier mois)</div>
+            <div class="card-body">
+                <h5 class="card-title text-danger">{{ total_out_last_month }} unités</h5>
+                <p class="card-text">total des sorties au cours des 30 derniers jours.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

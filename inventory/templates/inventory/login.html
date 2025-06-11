@@ -1,0 +1,27 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3 class="card-title text-center">Connexion</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }} {# Ou {{ form|crispy }} si vous utilisez crispy forms #}
+                    <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+                </form>
+                {% if form.errors %}
+                    <div class="alert alert-danger mt-3" role="alert">
+                        Votre nom d'utilisateur et/ou mot de passe n'a pas été reconnu. Veuillez réessayer.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

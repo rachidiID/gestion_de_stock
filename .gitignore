@@ -1,0 +1,31 @@
+# Byte-code files
+*.pyc
+__pycache__/
+
+# Django stuff:
+*.log
+*.pot
+*.mo
+*.sqlite3 # Your SQLite database
+db.sqlite3 # Specific name for default SQLite db
+
+# Environnement virtuel
+venv/
+env/
+*.env # .env files for environment variables
+
+# IDEs
+.vscode/ # VS Code configuration
+.idea/   # PyCharm configuration
+
+# OS generated files
+.DS_Store # macOS
+.ipynb_checkpoints # Jupyter notebooks
+
+# Compiled assets
+/static_root/ # If you collect static files here
+/media_root/  # If you store user-uploaded media here
+
+# Secret key and other sensitive data
+/stock_project/settings_local.py # Or any file you use for local settings
+/stock_project/local_settings.py

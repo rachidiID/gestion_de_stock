@@ -1,0 +1,30 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}{% if form.instance.pk %}Modifier Produit{% else %}Ajouter Produit{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h2 class="card-title text-center">
+                    {% if form.instance.pk %}Modifier le produit : {{ form.instance.nom }}{% else %}Ajouter un nouveau produit{% endif %}
+                </h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %} {# Très important pour la sécurité dans les formulaires Django #}
+                    {{ form.as_p }}
+
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            {% if form.instance.pk %}Enregistrer les modifications{% else %}Ajouter le produit{% endif %}
+                        </button>
+                        <a href="{% url 'product_list' %}" class="btn btn-secondary ml-2">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

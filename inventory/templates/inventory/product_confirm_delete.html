@@ -1,0 +1,26 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Confirmer Suppression{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-4">
+            <div class="card-header bg-danger text-white">
+                <h3 class="card-title text-center">Confirmer la suppression</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-center lead">Êtes-vous sûr de vouloir supprimer le produit :</p>
+                <h4 class="text-center text-danger">{{ product.nom }} ({{ product.code_barre }}) ?</h4>
+                <p class="text-center text-muted">Cette action est irréversible et supprimera également tous les mouvements de stock associés à ce produit.</p>
+
+                <form method="post" class="text-center mt-4">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-lg mr-2">Oui, supprimer</button>
+                    <a href="{% url 'product_list' %}" class="btn btn-secondary btn-lg">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
